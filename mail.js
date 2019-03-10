@@ -1,21 +1,33 @@
-var signupForm = document.getElementById('signup-form');
-var signupSuccess = document.getElementById('signup-success');
-var signupError = document.getElementById('signup-error');
-var signupBtn = document.getElementById('signup-button');
 
 // Initialize Firebase
 
 var config = {
-	apiKey: '<API_KEY>',
-	authDomain: '<PROJECT_ID>.firebaseapp.com',
-	databaseURL: 'https://<DATABASE_NAME>.firebaseio.com',
-	projectId: '<PROJECT_ID>',
-	storageBucket: '<BUCKET>.appspot.com',
-	messagingSenderId: '<SENDER_ID>'
+	apiKey: "AIzaSyALdTPfDLE6QvVewrPcADliioxs4CCd3tU",
+	authDomain: "leetgrademailinglist.firebaseapp.com",
+	databaseURL: "https://leetgrademailinglist.firebaseio.com",
+	projectId: "leetgrademailinglist",
+	storageBucket: "leetgrademailinglist.appspot.com",
+	messagingSenderId: "551938700891"
 };
+
 firebase.initializeApp(config);
 
-var onSignupComplete = function(error) {
+var database = firebase.database()
+
+var clearDocuments = function (doms) {
+	doms.forEach(function(dom) {
+		dom.innerHTML = '';
+	})
+}
+
+var onSignupComplete = function (error) {
+	var signupForm = document.getElementById('signup-form');
+	var signupSuccess = document.getElementById('signup-success');
+	var signupError = document.getElementById('signup-error');
+	var signupBtn = document.getElementById('signup-button');
+
+	clearDocuments([signupError, signupSuccess])
+
 	signupBtn.disabled = false;
 	if (error) {
 		signupError.innerHTML = 'Sorry. Could not signup.';
@@ -25,12 +37,13 @@ var onSignupComplete = function(error) {
 		signupForm.style.display = 'none';
 	}
 };
+
 function signup(formObj) {
 	// Store emails to firebase
-	var myFirebaseRef = new Firebase(
-		'https://yourappname.firebaseio.com/signups'
-	);
-	myFirebaseRef.push(
+	var usersRef = database.ref('users/')
+	var signupBtn = document.getElementById('signup-button');
+
+	usersRef.push(
 		{
 			name: formObj.name.value,
 			email: formObj.email.value

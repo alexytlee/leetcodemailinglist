@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/leetgrademailinglist/precache-manifest.fc3090f346f1ebf83b11da71391e8cc9.js"
+  "/leetgrademailinglist/precache-manifest.1fd37385ee96138078d83cd69b2d0769.js"
 );
 
 workbox.clientsClaim();

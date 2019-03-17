@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "c9044557e0928e03c91f",
+    "revision": "0a37679a7e6a9c5fdb86",
     "url": "/leetgrademailinglist/static/css/main.44a038dc.chunk.css"
   },
   {
-    "revision": "c9044557e0928e03c91f",
-    "url": "/leetgrademailinglist/static/js/main.b3532628.chunk.js"
+    "revision": "0a37679a7e6a9c5fdb86",
+    "url": "/leetgrademailinglist/static/js/main.b97bb492.chunk.js"
   },
   {
     "revision": "905534a2262f4a363610",
@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/leetgrademailinglist/static/js/2.a948c396.chunk.js"
   },
   {
-    "revision": "754314e72a368b33a37e85dff53ca94d",
+    "revision": "79f620c0b9a75dd817cc3fefe1ac88c1",
     "url": "/leetgrademailinglist/index.html"
   }
 ];

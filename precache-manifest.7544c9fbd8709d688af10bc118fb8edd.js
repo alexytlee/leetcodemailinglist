@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/leetgrademailinglist/static/js/2.a948c396.chunk.js"
   },
   {
-    "revision": "79f620c0b9a75dd817cc3fefe1ac88c1",
+    "revision": "fb163623a58627299a73f85a00cc4790",
     "url": "/leetgrademailinglist/index.html"
   }
 ];

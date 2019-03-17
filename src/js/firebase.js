@@ -7,7 +7,7 @@ let config = {
 	storageBucket: 'leetgrademailinglist.appspot.com',
 	messagingSenderId: '551938700891'
 };
-var fire = firebase.initializeApp(config);
+firebase.initializeApp(config);
 var dbase = firebase.database();
 
-export { fire, dbase };
+export { dbase };

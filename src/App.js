@@ -1,48 +1,69 @@
 import React, { Component } from 'react';
 import logo from './assets/leetgradelogo.png';
-import { fire, dbase } from './js/firebase';
+import { dbase } from './js/firebase';
 import './App.css';
-var clearDocuments = function(doms) {
-	doms.forEach(function(dom) {
-		dom.innerHTML = '';
-	});
-};
-
-var onSignupComplete = function(error) {
-	var signupForm = document.getElementById('signup-form');
-	var signupSuccess = document.getElementById('signup-success');
-	var signupError = document.getElementById('signup-error');
-	var signupBtn = document.getElementById('signup-button');
-
-	clearDocuments([signupError, signupSuccess]);
-
-	signupBtn.disabled = false;
-	if (error) {
-		signupError.innerHTML = 'Sorry. Could not signup.';
-	} else {
-		signupSuccess.innerHTML = 'Thanks for signing up!';
-		// hide the form
-		signupForm.style.display = 'none';
-	}
-};
-
-function signup(formObj) {
-	// Store emails to firebase
-	var usersRef = dbase.ref('users/');
-	var signupBtn = document.getElementById('signup-button');
-
-	usersRef.push(
-		{
-			name: formObj.name.value,
-			email: formObj.email.value
-		},
-		onSignupComplete
-	);
-	signupBtn.disabled = true;
-	return false;
-}
 
 class App extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			form: [],
+			alert: false,
+			alertData: {}
+		};
+	}
+
+	showAlert(type, message) {
+		this.setState({
+			alert: true,
+			alertData: { type, message }
+		});
+		setTimeout(() => {
+			this.setState({ alert: false });
+		}, 4000);
+	}
+
+	resetForm() {
+		this.refs.contactForm.reset();
+	}
+
+	componentWillMount() {
+		let formRef = dbase
+			.ref('form')
+			.orderByKey()
+			.limitToLast(6);
+		formRef.on('child_added', snapshot => {
+			const { name, email } = snapshot.val();
+			//const data = { name, email };
+			//console.log(data);
+		});
+	}
+
+	sendMessage(e) {
+		e.preventDefault();
+		const params = {
+			name: this.inputName.value,
+			email: this.inputEmail.value
+		};
+		if (params.name && params.email) {
+			dbase
+				.ref('users')
+				.push(params)
+				.then(() => {
+					this.showAlert('success', 'Thanks for signing up!');
+				})
+				.catch(() => {
+					this.showAlert(
+						'danger',
+						"Oh no! Error occured. We're on it!"
+					);
+				});
+			this.resetForm();
+		} else {
+			this.showAlert('warning', 'Please fill the form');
+		}
+	}
+
 	render() {
 		return (
 			<div className="App">
@@ -66,43 +87,50 @@ class App extends Component {
 								pleasant experience. For first access and free
 								features, subscribe to our mailing list.
 							</h5>
-							<div className="signup">
-								<p
-									id="signup-success"
-									className="text-success"
+						</div>
+					</div>
+
+					<div>
+						<br />
+						<form
+							onSubmit={this.sendMessage.bind(this)}
+							ref="contactForm"
+						>
+							<div className="form-group">
+								<input
+									type="text"
+									className="form-control"
+									id="name"
+									placeholder="Name"
+									ref={name => (this.inputName = name)}
 								/>
-								<p id="signup-error" className="text-danger" />
-								<div className="col-md-6 offset-md-3 text-center">
-									<form
-										className="signup-form text-center"
-										id="signup-form"
-										role="form"
-									>
-										<input
-											className="form-control"
-											name="name"
-											type="name"
-											placeholder="Your name"
-											required
-										/>
-										<input
-											className="form-control"
-											name="email"
-											type="email"
-											placeholder="Your email"
-											required
-										/>
-										<button
-											className="btn btn-info"
-											id="signup-button"
-											type="submit"
-										>
-											Sign up for Leetgrade beta!
-										</button>
-									</form>
+							</div>
+							<div className="form-group">
+								<input
+									type="email"
+									className="form-control"
+									id="email"
+									placeholder="Email"
+									ref={email => (this.inputEmail = email)}
+								/>
+							</div>
+							<button type="submit" className="btn btn-info">
+								Sign up for Leetgrade beta!
+							</button>
+						</form>
+						<br />
+						{this.state.alert && (
+							<div
+								className={`alert alert-${
+									this.state.alertData.type
+								}`}
+								role="alert"
+							>
+								<div className="container">
+									{this.state.alertData.message}
 								</div>
 							</div>
-						</div>
+						)}
 					</div>
 				</header>
 				<div className="col-md-12 text-center">
